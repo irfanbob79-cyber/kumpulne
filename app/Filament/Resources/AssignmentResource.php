@@ -70,12 +70,44 @@ class AssignmentResource extends Resource
 
                 Forms\Components\Section::make('Ketentuan Unggahan & Batas Waktu')
                     ->schema([
-                        Forms\Components\TagsInput::make('allowed_extensions')
-                            ->label('Ekstensi File yang Diizinkan')
-                            ->placeholder('Tambah ekstensi lalu enter (misal: pdf, jpg, zip)')
+                        Forms\Components\CheckboxList::make('allowed_extensions')
+                            ->label('Ekstensi File yang Diizinkan (Tinggal Klik Pilih)')
+                            ->options([
+                                'pdf' => 'PDF (.pdf)',
+                                'doc' => 'Word (.doc)',
+                                'docx' => 'Word (.docx)',
+                                'ppt' => 'PowerPoint (.ppt)',
+                                'pptx' => 'PowerPoint (.pptx)',
+                                'xls' => 'Excel (.xls)',
+                                'xlsx' => 'Excel (.xlsx)',
+                                'jpg' => 'JPG (.jpg)',
+                                'jpeg' => 'JPEG (.jpeg)',
+                                'png' => 'PNG (.png)',
+                                'webp' => 'WebP (.webp)',
+                                'svg' => 'SVG (.svg)',
+                                'cdr' => 'CorelDraw (.cdr)',
+                                'psd' => 'Photoshop (.psd)',
+                                'ai' => 'Illustrator (.ai)',
+                                'eps' => 'EPS (.eps)',
+                                'fig' => 'Figma (.fig)',
+                                'mp4' => 'Video MP4 (.mp4)',
+                                'mov' => 'Video MOV (.mov)',
+                                'mp3' => 'Audio MP3 (.mp3)',
+                                'zip' => 'Arsip ZIP (.zip)',
+                                'rar' => 'Arsip RAR (.rar)',
+                                '7z' => 'Arsip 7z (.7z)',
+                                'txt' => 'Teks (.txt)',
+                            ])
+                            ->columns([
+                                'default' => 2,
+                                'sm' => 3,
+                                'md' => 4,
+                                'lg' => 6,
+                            ])
+                            ->bulkToggleable()
                             ->default(['pdf', 'jpg', 'png', 'zip', 'psd', 'ai', 'cdr'])
-                            ->helperText('Contoh: pdf, jpg, png, zip, cdr, psd, ai. Kosongkan jika menerima semua ekstensi dokumen umum.')
-                            ->separator(','),
+                            ->helperText('Centang format file yang diperbolehkan. Kosongkan semua jika ingin menerima seluruh format dokumen/desain umum.')
+                            ->columnSpanFull(),
                         Forms\Components\TextInput::make('max_file_size_mb')
                             ->label('Batas Maksimal Ukuran File (MB)')
                             ->numeric()

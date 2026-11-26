@@ -6,6 +6,8 @@ use App\Filament\Resources\SubmissionResource\Pages;
 use App\Models\Submission;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -64,6 +66,85 @@ class SubmissionResource extends Resource
                             ->columnSpanFull()
                             ->disabled(),
                     ])->columns(2),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\Section::make('Informasi Pengumpulan Siswa')
+                    ->icon('heroicon-o-document-check')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('receipt_code')
+                            ->label('Kode Resi')
+                            ->fontFamily('mono')
+                            ->weight('bold')
+                            ->badge()
+                            ->color('primary')
+                            ->copyable(),
+                        Infolists\Components\TextEntry::make('is_late')
+                            ->label('Status Ketepatan')
+                            ->badge()
+                            ->color(fn ($state) => $state ? 'danger' : 'success')
+                            ->formatStateUsing(fn ($state) => $state ? 'Terlambat' : 'Tepat Waktu'),
+                        Infolists\Components\TextEntry::make('student_name')
+                            ->label('Nama Siswa')
+                            ->weight('bold'),
+                        Infolists\Components\TextEntry::make('classroom.name')
+                            ->label('Kelas')
+                            ->badge()
+                            ->color('info'),
+                        Infolists\Components\TextEntry::make('assignment.title')
+                            ->label('Tugas')
+                            ->columnSpanFull(),
+                        Infolists\Components\TextEntry::make('upload_type')
+                            ->label('Tipe Unggahan')
+                            ->badge()
+                            ->formatStateUsing(fn ($state) => $state === 'single_file' ? '1 File Tunggal' : 'Folder / Multi-File'),
+                        Infolists\Components\TextEntry::make('total_size_bytes')
+                            ->label('Total Ukuran')
+                            ->formatStateUsing(fn ($state) => $state >= 1024 * 1024 ? round($state / 1024 / 1024, 2) . ' MB' : round($state / 1024, 1) . ' KB'),
+                        Infolists\Components\TextEntry::make('submitted_at')
+                            ->label('Waktu Dikumpulkan')
+                            ->dateTime('d M Y, H:i:s'),
+                        Infolists\Components\TextEntry::make('driveAccount.account_name')
+                            ->label('Akun Penyimpanan')
+                            ->default('Penyimpanan Lokal (Fallback)')
+                            ->badge()
+                            ->color(fn ($record) => str_starts_with((string) $record->gdrive_target_id, 'local_') ? 'warning' : 'success'),
+                        Infolists\Components\TextEntry::make('gdrive_web_view_link')
+                            ->label('Tautan File')
+                            ->url(fn ($state) => $state)
+                            ->openUrlInNewTab()
+                            ->color('primary')
+                            ->columnSpanFull(),
+                    ])->columns(2),
+
+                Infolists\Components\Section::make('Rincian File Terkirim')
+                    ->icon('heroicon-o-paper-clip')
+                    ->schema([
+                        Infolists\Components\RepeatableEntry::make('items')
+                            ->label('')
+                            ->schema([
+                                Infolists\Components\TextEntry::make('original_filename')
+                                    ->label('Nama Asli')
+                                    ->weight('bold'),
+                                Infolists\Components\TextEntry::make('renamed_filename')
+                                    ->label('Nama Tersimpan')
+                                    ->fontFamily('mono'),
+                                Infolists\Components\TextEntry::make('file_size_bytes')
+                                    ->label('Ukuran')
+                                    ->formatStateUsing(fn ($state) => $state >= 1024 * 1024 ? round($state / 1024 / 1024, 2) . ' MB' : round($state / 1024, 1) . ' KB'),
+                                Infolists\Components\TextEntry::make('gdrive_web_view_link')
+                                    ->label('Link File')
+                                    ->formatStateUsing(fn () => 'Buka File ↗')
+                                    ->url(fn ($state) => $state)
+                                    ->openUrlInNewTab()
+                                    ->color('success'),
+                            ])
+                            ->columns(4),
+                    ]),
             ]);
     }
 
