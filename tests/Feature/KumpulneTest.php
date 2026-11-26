@@ -208,4 +208,19 @@ class KumpulneTest extends TestCase
         $response = $this->actingAs($user)->get('/admin');
         $response->assertStatus(200);
     }
+
+    public function test_google_drive_service_resolves_connected_account_from_container(): void
+    {
+        DriveAccount::create([
+            'account_name' => 'Drive Test',
+            'google_email' => 'guru@example.com',
+            'refresh_token' => 'fake_refresh_token_12345',
+            'priority' => 1,
+            'is_active' => true,
+            'is_full' => false,
+        ]);
+
+        $service = app(\App\Services\GoogleDriveService::class);
+        $this->assertTrue($service->isConnected());
+    }
 }

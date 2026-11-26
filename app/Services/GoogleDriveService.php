@@ -22,13 +22,15 @@ class GoogleDriveService
     protected ?GoogleDrive $driveService = null;
     protected ?DriveAccount $activeAccount = null;
 
-    public function __construct(?DriveAccount $account = null)
+    public function __construct()
     {
-        if ($account) {
-            $this->activeAccount = $account;
-        } else {
-            $this->activeAccount = $this->getActiveAccount();
-        }
+        $this->activeAccount = $this->getActiveAccount();
+    }
+
+    public function setAccount(DriveAccount $account): self
+    {
+        $this->activeAccount = $account;
+        return $this;
     }
 
     public function getActiveAccount(): ?DriveAccount
@@ -159,8 +161,8 @@ class GoogleDriveService
 
     public function isConnected(?DriveAccount $account = null): bool
     {
-        $acc = $account ?: $this->activeAccount;
-        return $acc && !empty($acc->refresh_token);
+        $acc = $account ?: ($this->activeAccount ?: $this->getActiveAccount());
+        return $acc && $acc->exists && !empty($acc->refresh_token);
     }
 
     /**
