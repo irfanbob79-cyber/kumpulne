@@ -198,4 +198,14 @@ class KumpulneTest extends TestCase
         $response = $this->get('/admin/login');
         $response->assertStatus(200);
     }
+
+    public function test_admin_user_can_access_filament_panel_in_production(): void
+    {
+        $user = \App\Models\User::factory()->create();
+
+        $this->assertTrue($user->canAccessPanel(\Filament\Facades\Filament::getPanel('admin')));
+
+        $response = $this->actingAs($user)->get('/admin');
+        $response->assertStatus(200);
+    }
 }
