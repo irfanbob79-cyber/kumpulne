@@ -1,6 +1,15 @@
+@php
+    $renderer = new \BaconQrCode\Renderer\ImageRenderer(
+        new \BaconQrCode\Renderer\RendererStyle\RendererStyle(240, 1),
+        new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
+    );
+    $writer = new \BaconQrCode\Writer($renderer);
+    $qrSvg = $writer->writeString($url);
+@endphp
+
 <div class="flex flex-col items-center justify-center p-4 space-y-4 text-center">
     <div class="bg-white p-4 rounded-xl shadow border border-gray-200 inline-block">
-        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(240)->margin(1)->generate($url) !!}
+        {!! $qrSvg !!}
     </div>
     <div class="space-y-1">
         <h3 class="font-bold text-lg text-gray-800">{{ $assignment->title }}</h3>

@@ -29,13 +29,13 @@
 
 ## 🛠️ Tech Stack & Persyaratan Sistem
 
-- **PHP:** 8.2 atau 8.3+ (Ekstensi: `pdo_mysql`, `curl`, `fileinfo`, `gd`, `intl`, `mbstring`, `zip`, `openssl`)
+- **PHP:** 8.2 atau 8.3+ (Ekstensi: `pdo_mysql`, `curl`, `fileinfo`, `iconv`, `intl`, `mbstring`, `zip`, `openssl`)
 - **Backend:** Laravel 11
 - **Admin Panel:** Filament v3
 - **Database:** MySQL 8.x / MariaDB
 - **Frontend:** Blade, Tailwind CSS, Alpine.js
 - **Cloud Storage:** Google Drive API v3 (`google/apiclient`)
-- **QR Code:** `simplesoftwareio/simple-qrcode`
+- **QR Code:** `bacon/bacon-qr-code` (SVG murni, tanpa perlu `ext-gd`)
 
 ---
 
